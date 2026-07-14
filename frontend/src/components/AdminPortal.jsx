@@ -122,6 +122,8 @@ export default function AdminPortal({ token, onLogout }) {
   const [approving, setApproving] = useState(false);
   const [approvedSlot, setApprovedSlot] = useState(false);
   const [seedingInventory, setSeedingInventory] = useState(false);
+  
+  const selectedSessionName = sessions.find(s => s.id === activeSessionId)?.name || 'None';
   const [targetBlock, setTargetBlock] = useState('All');
   const [classroomText, setClassroomText] = useState(`East Block (EB)
 Ground Floor: EB-011, EB-012, EB-013, EB-014, EB-015 (Smart Classroom)
@@ -875,7 +877,7 @@ Third Floor: SB-302 (Smart Classroom), SB-303, SB-304, SB-305, SB-306, SB-308, S
           {activeSessionId && !apiResult && (
             <div className="glass-panel" style={{ padding: '2.5rem' }}>
               <h3 style={{ fontSize: '1.25rem', marginBottom: '1.5rem' }}>
-                Upload Seating Arrangement for Active Session: <span style={{ color: 'var(--primary)' }}>{stats.active_session || 'None'}</span>
+                Upload Seating Arrangement for Selected Session: <span style={{ color: 'var(--primary)' }}>{selectedSessionName}</span>
               </h3>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -1130,8 +1132,8 @@ Third Floor: SB-302 (Smart Classroom), SB-303, SB-304, SB-305, SB-306, SB-308, S
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
               <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>Active Session:</span>
-                <span className="badge badge-info">{stats.active_session}</span>
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>Selected Session:</span>
+                <span className="badge badge-info">{selectedSessionName}</span>
               </div>
               
               {dbRanges.length > 0 && (
@@ -1271,7 +1273,7 @@ Floor: Room1, Room2, ..."
                 {/* Exam Data Ingestion uploads */}
                 <div className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                   <h3 style={{ fontSize: '1.25rem', fontWeight: 700 }}>
-                    2. Exam Data Ingestion: <span style={{ color: 'var(--primary)' }}>{stats.active_session || 'None'}</span>
+                    2. Exam Data Ingestion: <span style={{ color: 'var(--primary)' }}>{selectedSessionName}</span>
                   </h3>
                   <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', lineHeight: '1.4' }}>
                     Upload Excel or PDF files to ingest student registrations (PIN lists) and the master schedule slots. These are stored securely to generate the mixed layouts.
@@ -1308,7 +1310,7 @@ Floor: Room1, Room2, ..."
               {/* Section 2: Seating Planner Runner */}
               <div className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                 <h3 style={{ fontSize: '1.25rem', fontWeight: 700 }}>
-                  3. "12-12" Mixed Seating Planner: <span style={{ color: 'var(--primary)' }}>{stats.active_session || 'None'}</span>
+                  3. "12-12" Mixed Seating Planner: <span style={{ color: 'var(--primary)' }}>{selectedSessionName}</span>
                 </h3>
                 
                 {slots.length === 0 ? (
