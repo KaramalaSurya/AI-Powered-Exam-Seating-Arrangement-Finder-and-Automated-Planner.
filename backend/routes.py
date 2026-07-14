@@ -222,8 +222,6 @@ def update_session_status(session_id: int, data: SessionUpdate):
     conn = get_db_connection()
     cursor = conn.cursor()
     try:
-        if data.is_active:
-            cursor.execute("UPDATE sessions SET is_active = 0 WHERE id != ?", (session_id,))
         cursor.execute("UPDATE sessions SET is_active = ? WHERE id = ?", (1 if data.is_active else 0, session_id))
         conn.commit()
     finally:
