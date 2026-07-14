@@ -98,8 +98,22 @@ def is_roll_in_range(roll_num: str, prefix: str, start_str: str, end_str: str) -
     expanded = expand_roll_range(prefix, start_str, end_str)
     return roll_num in expanded
 
+@router.get("/student/active-sessions")
+def get_active_sessions_for_students():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("SELECT id, name FROM sessions WHERE is_active = 1")
+        sessions = [dict(row) for row in cursor.fetchall()]
+    finally:
+        conn.close()
+    return sessions
+
 @router.get("/student/search")
-def search_student_seating(roll_number: str):
+def search_student_seating(
+    roll_number: str,
+    session_id: Optional[int] = None
+):
     """
     Search endpoint for students. 
     Performs optimized SQL lookup using BETWEEN operation to find the corresponding room range.
@@ -111,8 +125,12 @@ def search_student_seating(roll_number: str):
     conn = get_db_connection()
     cursor = conn.cursor()
     
-    # 1. Fetch active sessions
-    cursor.execute("SELECT id, name FROM sessions WHERE is_active = 1")
+    # 1. Fetch active sessions or filter by session_id
+    if session_id is not None:
+        cursor.execute("SELECT id, name FROM sessions WHERE id = ?", (session_id,))
+    else:
+        cursor.execute("SELECT id, name FROM sessions WHERE is_active = 1")
+        
     active_sessions = [dict(row) for row in cursor.fetchall()]
     if not active_sessions:
         conn.close()
@@ -241,14 +259,15 @@ def delete_session(session_id: int):
 @router.post("/admin/upload")
 async def upload_document(
     file: UploadFile = File(...), 
-    session_id: int = Form(...)
+    session_id: int = Form(...),
+    use_ai: bool = Form(True)
 ):
     """
     Endpoint for uploading a file (PDF, Excel, Image).
     Extracts, OCRs, parses, and validates the data, returning it for admin preview.
     """
     file_bytes = await file.read()
-    api_key = get_gemini_api_key()
+    api_key = get_gemini_api_key() if use_ai else None
     
     result = AIOrchestrator.ingest_document(
         filename=file.filename,

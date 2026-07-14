@@ -85,6 +85,7 @@ export default function AdminPortal({ token, onLogout }) {
   const [activeSessionId, setActiveSessionId] = useState('');
   const [newSessionName, setNewSessionName] = useState('');
   const [studentsPerBench, setStudentsPerBench] = useState(1);
+  const [useAiIngestion, setUseAiIngestion] = useState(false);
   
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
   const [deleteConfirmName, setDeleteConfirmName] = useState('');
@@ -575,6 +576,7 @@ Third Floor: SB-302 (Smart Classroom), SB-303, SB-304, SB-305, SB-306, SB-308, S
     const formData = new FormData();
     formData.append('file', file);
     formData.append('session_id', activeSessionId);
+    formData.append('use_ai', useAiIngestion);
     
     try {
       const res = await fetch('http://localhost:8085/api/admin/upload', {
@@ -890,6 +892,19 @@ Third Floor: SB-302 (Smart Classroom), SB-303, SB-304, SB-305, SB-306, SB-308, S
                   </div>
                 </label>
 
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center', margin: '0.25rem 0' }}>
+                  <input
+                    type="checkbox"
+                    id="use-ai-ingestion"
+                    checked={useAiIngestion}
+                    onChange={(e) => setUseAiIngestion(e.target.checked)}
+                    style={{ cursor: 'pointer', width: '16px', height: '16px' }}
+                  />
+                  <label htmlFor="use-ai-ingestion" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)', cursor: 'pointer' }}>
+                    Use AI Ingestion & OCR Extraction (Requires configured Gemini API key)
+                  </label>
+                </div>
+ 
                 <div style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
                   <span>— OR —</span>
                   <button onClick={handleLoadMockNotice} className="btn-secondary" style={{ padding: '0.4rem 1rem', fontSize: '0.8rem' }}>
