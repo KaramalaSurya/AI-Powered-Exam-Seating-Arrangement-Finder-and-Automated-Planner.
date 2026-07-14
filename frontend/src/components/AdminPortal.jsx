@@ -479,6 +479,7 @@ Third Floor: SB-302 (Smart Classroom), SB-303, SB-304, SB-305, SB-306, SB-308, S
   };
 
   const handleActivateSession = async (sessId) => {
+    setActiveSessionId(sessId);
     try {
       const res = await fetch(`http://localhost:8085/api/admin/sessions/${sessId}`, {
         method: 'PUT',
