@@ -8,9 +8,7 @@ export default function StudentSearch() {
   const [error, setError] = useState('');
   const [activeSession, setActiveSession] = useState('');
   const [activeSlots, setActiveSlots] = useState([]);
-  
-  const [sessionsList, setSessionsList] = useState([]);
-  const [selectedSessionId, setSelectedSessionId] = useState('');
+
 
   useEffect(() => {
     const fetchActiveSession = async () => {
@@ -39,22 +37,7 @@ export default function StudentSearch() {
 
     fetchActiveSession();
     fetchActiveSlots();
-    
-    const fetchSessions = async () => {
-      try {
-        const res = await fetch('http://localhost:8085/api/student/active-sessions');
-        const data = await res.json();
-        if (Array.isArray(data)) {
-          setSessionsList(data);
-          if (data.length > 0) {
-            setSelectedSessionId(data[0].id);
-          }
-        }
-      } catch (e) {
-        console.error('Failed to fetch active sessions:', e);
-      }
-    };
-    fetchSessions();
+
   }, []);
 
   // Sample roll numbers for testing
@@ -77,8 +60,7 @@ export default function StudentSearch() {
     setResult(null);
 
     try {
-      const sessionParam = selectedSessionId ? `&session_id=${selectedSessionId}` : '';
-      const response = await fetch(`http://localhost:8085/api/student/search?roll_number=${encodeURIComponent(targetRoll.trim())}${sessionParam}`);
+      const response = await fetch(`http://localhost:8085/api/student/search?roll_number=${encodeURIComponent(targetRoll.trim())}`);
       const data = await response.json();
       
       if (!response.ok) {
@@ -123,22 +105,7 @@ export default function StudentSearch() {
         </p>
 
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          {sessionsList.length > 0 && (
-            <div style={{ minWidth: '220px', position: 'relative' }}>
-              <select
-                value={selectedSessionId}
-                onChange={(e) => setSelectedSessionId(e.target.value)}
-                className="input-field"
-                style={{ width: '100%', cursor: 'pointer', fontWeight: 600 }}
-              >
-                {sessionsList.map(s => (
-                  <option key={s.id} value={s.id}>
-                    {s.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
+
           <div style={{ flex: 1, minWidth: '280px', position: 'relative' }}>
             <input
               type="text"
