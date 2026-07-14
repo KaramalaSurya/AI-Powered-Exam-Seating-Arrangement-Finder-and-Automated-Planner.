@@ -74,7 +74,6 @@ def run_12_12_allocation(
 
     # Map normalized scheduled subject to original scheduled subject name
     exact_scheduled = set(slot_subjects)
-    norm_to_scheduled = {normalize_subject(s): s for s in slot_subjects}
     
     students = []
     for s in all_students:
@@ -82,8 +81,15 @@ def run_12_12_allocation(
             students.append(s)
         else:
             norm_student_subj = normalize_subject(s["subject"])
-            if norm_student_subj in norm_to_scheduled:
-                s["subject"] = norm_to_scheduled[norm_student_subj]
+            matched_sched = None
+            for sched_subj in slot_subjects:
+                norm_sched = normalize_subject(sched_subj)
+                if norm_student_subj in norm_sched or norm_sched in norm_student_subj:
+                    matched_sched = sched_subj
+                    break
+            
+            if matched_sched:
+                s["subject"] = matched_sched
                 students.append(s)
     if not students:
         return {

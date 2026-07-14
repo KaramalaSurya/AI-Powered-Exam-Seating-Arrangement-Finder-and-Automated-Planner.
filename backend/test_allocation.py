@@ -238,6 +238,29 @@ def run_tests():
                     
         print("[Pass] 48 Capacity (2 per bench) seating allocation and checkerboard layout test PASSED successfully!")
         
+        # Test 8: Verify tolerant subject matching with department prefixes
+        cursor.execute("DELETE FROM student_registrations WHERE session_id = ?", (session_id,))
+        cursor.execute("DELETE FROM exam_schedules WHERE session_id = ?", (session_id,))
+        
+        # Schedule with department prefix
+        cursor.execute("""
+            INSERT INTO exam_schedules (session_id, exam_date, exam_time, subject)
+            VALUES (?, ?, ?, ?)
+        """, (session_id, "2026-07-06", "10:00 AM - 01:00 PM", "Computer Science and Engineering (CSE) Machine Learning"))
+        
+        # Registration without department prefix
+        cursor.execute("""
+            INSERT INTO student_registrations (session_id, roll_number, subject)
+            VALUES (?, ?, ?)
+        """, (session_id, "24691A0501", "Machine Learning"))
+        
+        conn.commit()
+        
+        res = run_12_12_allocation(session_id, "2026-07-06", "10:00 AM - 01:00 PM", conn)
+        assert res["success"] is True, "Department-prefixed subject matching allocation failed"
+        assert res["total_students_allocated"] == 1, f"Expected 1 student allocated, got {res['total_students_allocated']}"
+        print("[Pass] Department-prefixed subject matching test PASSED successfully!")
+        
         # Clean up test session
         cursor.execute("DELETE FROM sessions WHERE id = 999")
         conn.commit()
