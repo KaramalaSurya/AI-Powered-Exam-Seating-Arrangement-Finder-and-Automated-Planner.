@@ -750,8 +750,24 @@ def get_active_slots_for_students():
         """, session_ids)
         schedules = [dict(row) for row in cursor.fetchall()]
         
+        # 3. Get all unique slots from seating_ranges
+        cursor.execute(f"""
+            SELECT DISTINCT session_id, exam_date, exam_time, subject
+            FROM seating_ranges
+            WHERE session_id IN ({placeholders})
+        """, session_ids)
+        ranges_slots = [dict(row) for row in cursor.fetchall()]
+        
+        seen = set()
+        combined_schedules = []
+        for s in schedules + ranges_slots:
+            key = (s["session_id"], s["exam_date"], s["exam_time"], s["subject"])
+            if key not in seen:
+                seen.add(key)
+                combined_schedules.append(s)
+        
         active_slots = []
-        for s in schedules:
+        for s in combined_schedules:
             sess_id = s["session_id"]
             exam_date = s["exam_date"]
             exam_time = s["exam_time"]
@@ -779,7 +795,19 @@ def get_active_slots_for_students():
                     
             students_count = len(regs_for_subject)
             if students_count == 0:
-                students_count = 65  # placeholder default if no match
+                cursor.execute("""
+                    SELECT roll_prefix, start_num, end_num 
+                    FROM seating_ranges 
+                    WHERE session_id = ? AND exam_date = ? AND exam_time = ? AND subject = ?
+                """, (sess_id, exam_date, exam_time, subject))
+                ranges_for_slot = cursor.fetchall()
+                if ranges_for_slot:
+                    calc_count = 0
+                    for rp, start_num, end_num in ranges_for_slot:
+                        calc_count += len(expand_roll_range(rp, start_num, end_num))
+                    students_count = calc_count if calc_count > 0 else 65
+                else:
+                    students_count = 65
                 
             # Check if ranges are committed in database
             cursor.execute("""
