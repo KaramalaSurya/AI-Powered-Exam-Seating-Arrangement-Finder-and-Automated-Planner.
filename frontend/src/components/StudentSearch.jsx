@@ -287,34 +287,56 @@ export default function StudentSearch() {
                       style={result.seating_details.students_per_bench === 1 ? { gridTemplateColumns: '1fr' } : {}}
                     >
                       {/* Left seat of the bench */}
-                      {cell.left && (
-                        <div 
-                          className={`seat ${cell.left.roll === 'Empty' ? 'empty' : ''} ${cell.left.highlighted ? 'my-seat' : ''}`}
-                          title={cell.left.roll}
-                        >
-                          <span style={{ fontSize: '0.8rem', fontWeight: 700 }}>
-                            {cell.left.roll === 'Empty' ? '—' : cell.left.roll.slice(-4)}
-                          </span>
-                          <span className="seat-label" style={{ fontSize: '0.55rem', opacity: 0.8 }}>
-                            {cell.left.roll === 'Empty' ? 'Vacant' : getShortSubject(cell.left.subject)}
-                          </span>
-                        </div>
-                      )}
+                      {cell.left && (() => {
+                        const isHighlighted = cell.left.highlighted;
+                        const isEmpty = cell.left.roll === 'Empty';
+                        const isSubjectA = (rIdx + cIdx + 0) % 2 === 0;
+                        const seatStyle = !isHighlighted && !isEmpty ? {
+                          background: isSubjectA ? 'rgba(59, 130, 246, 0.08)' : 'rgba(16, 185, 129, 0.08)',
+                          color: isSubjectA ? 'var(--primary)' : 'var(--accent)',
+                          border: isSubjectA ? '1px solid rgba(59, 130, 246, 0.15)' : '1px solid rgba(16, 185, 129, 0.15)'
+                        } : {};
+                        return (
+                          <div 
+                            className={`seat ${cell.left.roll === 'Empty' ? 'empty' : ''} ${cell.left.highlighted ? 'my-seat' : ''}`}
+                            title={cell.left.roll}
+                            style={seatStyle}
+                          >
+                            <span style={{ fontSize: '0.8rem', fontWeight: 700, color: !isHighlighted && !isEmpty ? (isSubjectA ? 'var(--primary)' : 'var(--accent)') : undefined }}>
+                              {cell.left.roll === 'Empty' ? '—' : cell.left.roll.slice(-4)}
+                            </span>
+                            <span className="seat-label" style={{ fontSize: '0.55rem', opacity: 0.8, color: !isHighlighted && !isEmpty ? (isSubjectA ? 'var(--primary)' : 'var(--accent)') : undefined }}>
+                              {cell.left.roll === 'Empty' ? 'Vacant' : getShortSubject(cell.left.subject)}
+                            </span>
+                          </div>
+                        );
+                      })()}
 
                       {/* Right seat of the bench */}
-                      {result.seating_details.students_per_bench === 2 && cell.right && (
-                        <div 
-                          className={`seat ${cell.right.roll === 'Empty' ? 'empty' : ''} ${cell.right.highlighted ? 'my-seat' : ''}`}
-                          title={cell.right.roll}
-                        >
-                          <span style={{ fontSize: '0.8rem', fontWeight: 700 }}>
-                            {cell.right.roll === 'Empty' ? '—' : cell.right.roll.slice(-4)}
-                          </span>
-                          <span className="seat-label" style={{ fontSize: '0.55rem', opacity: 0.8 }}>
-                            {cell.right.roll === 'Empty' ? 'Vacant' : getShortSubject(cell.right.subject)}
-                          </span>
-                        </div>
-                      )}
+                      {result.seating_details.students_per_bench === 2 && cell.right && (() => {
+                        const isHighlighted = cell.right.highlighted;
+                        const isEmpty = cell.right.roll === 'Empty';
+                        const isSubjectA = (rIdx + cIdx + 1) % 2 === 0;
+                        const seatStyle = !isHighlighted && !isEmpty ? {
+                          background: isSubjectA ? 'rgba(59, 130, 246, 0.08)' : 'rgba(16, 185, 129, 0.08)',
+                          color: isSubjectA ? 'var(--primary)' : 'var(--accent)',
+                          border: isSubjectA ? '1px solid rgba(59, 130, 246, 0.15)' : '1px solid rgba(16, 185, 129, 0.15)'
+                        } : {};
+                        return (
+                          <div 
+                            className={`seat ${cell.right.roll === 'Empty' ? 'empty' : ''} ${cell.right.highlighted ? 'my-seat' : ''}`}
+                            title={cell.right.roll}
+                            style={seatStyle}
+                          >
+                            <span style={{ fontSize: '0.8rem', fontWeight: 700, color: !isHighlighted && !isEmpty ? (isSubjectA ? 'var(--primary)' : 'var(--accent)') : undefined }}>
+                              {cell.right.roll === 'Empty' ? '—' : cell.right.roll.slice(-4)}
+                            </span>
+                            <span className="seat-label" style={{ fontSize: '0.55rem', opacity: 0.8, color: !isHighlighted && !isEmpty ? (isSubjectA ? 'var(--primary)' : 'var(--accent)') : undefined }}>
+                              {cell.right.roll === 'Empty' ? 'Vacant' : getShortSubject(cell.right.subject)}
+                            </span>
+                          </div>
+                        );
+                      })()}
                     </div>
                   ))
                 )}
