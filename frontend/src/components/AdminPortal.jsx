@@ -63,14 +63,22 @@ function expandRangeList(prefix, startStr, endStr) {
 }
 
 export default function AdminPortal({ token, onLogout }) {
-  const fetch = (url, options = {}) => {
-    return window.fetch(url, {
-      ...options,
-      headers: {
-        ...options.headers,
-        'Authorization': `Bearer ${token}`
+  const fetch = async (url, options = {}) => {
+    try {
+      const res = await window.fetch(url, {
+        ...options,
+        headers: {
+          ...options.headers,
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (res.status === 401) {
+        onLogout();
       }
-    });
+      return res;
+    } catch (e) {
+      throw e;
+    }
   };
 
   const [sessions, setSessions] = useState([]);
