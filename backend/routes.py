@@ -802,6 +802,7 @@ def get_active_slots_for_students():
                 """, (sess_id, exam_date, exam_time, subject))
                 ranges_for_slot = cursor.fetchall()
                 if ranges_for_slot:
+                    from backend.agents import expand_roll_range
                     calc_count = 0
                     for rp, start_num, end_num in ranges_for_slot:
                         calc_count += len(expand_roll_range(rp, start_num, end_num))
