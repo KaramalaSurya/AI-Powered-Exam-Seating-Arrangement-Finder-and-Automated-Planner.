@@ -188,6 +188,10 @@ Third Floor: SB-302 (Smart Classroom), SB-303, SB-304, SB-305, SB-306, SB-308, S
   const handleStudentsUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+    if (!activeSessionId) {
+      alert("Please select or create an active examination session first.");
+      return;
+    }
     setIngestingStudents(true);
     const formData = new FormData();
     formData.append('file', file);
@@ -214,6 +218,10 @@ Third Floor: SB-302 (Smart Classroom), SB-303, SB-304, SB-305, SB-306, SB-308, S
   const handleScheduleUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+    if (!activeSessionId) {
+      alert("Please select or create an active examination session first.");
+      return;
+    }
     setIngestingSchedule(true);
     const formData = new FormData();
     formData.append('file', file);
@@ -515,6 +523,10 @@ Third Floor: SB-302 (Smart Classroom), SB-303, SB-304, SB-305, SB-306, SB-308, S
   };
 
   const triggerUpload = async (file) => {
+    if (!activeSessionId) {
+      alert("Please select or create an active examination session first.");
+      return;
+    }
     setUploading(true);
     setUploadedFile(file);
     setApiResult(null);

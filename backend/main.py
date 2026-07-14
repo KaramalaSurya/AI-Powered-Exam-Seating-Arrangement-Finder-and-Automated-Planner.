@@ -21,6 +21,9 @@ app = FastAPI(
 
 @app.middleware("http")
 async def admin_auth_middleware(request: Request, call_next):
+    if request.method == "OPTIONS":
+        return await call_next(request)
+        
     if request.url.path.startswith("/api/admin/") and request.url.path != "/api/admin/login":
         auth_header = request.headers.get("Authorization")
         if not auth_header:
