@@ -876,9 +876,21 @@ Third Floor: SB-302 (Smart Classroom), SB-303, SB-304, SB-305, SB-306, SB-308, S
 
           {activeSessionId && !apiResult && (
             <div className="glass-panel" style={{ padding: '2.5rem' }}>
-              <h3 style={{ fontSize: '1.25rem', marginBottom: '1.5rem' }}>
-                Upload Seating Arrangement for Selected Session: <span style={{ color: 'var(--primary)' }}>{selectedSessionName}</span>
-              </h3>
+              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+                <span style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-main)' }}>Upload Seating Arrangement for Selected Session:</span>
+                <select 
+                  value={activeSessionId}
+                  onChange={(e) => handleActivateSession(parseInt(e.target.value))}
+                  className="input-field"
+                  style={{ width: 'auto', minWidth: '260px', padding: '0.4rem 2rem 0.4rem 1rem', cursor: 'pointer', fontWeight: 600 }}
+                >
+                  {sessions.map(s => (
+                    <option key={s.id} value={s.id}>
+                      {s.name} {s.is_active ? '(Active)' : ''}
+                    </option>
+                  ))}
+                </select>
+              </div>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                 <label className="dropzone">
@@ -1221,6 +1233,23 @@ Third Floor: SB-302 (Smart Classroom), SB-303, SB-304, SB-305, SB-306, SB-308, S
 
           {activeSessionId && (
             <>
+              {/* Session Selector in Planner View */}
+              <div className="glass-panel animate-fade-in" style={{ padding: '1rem 1.5rem', display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap', marginBottom: '1rem' }}>
+                <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontWeight: 600 }}>Target Examination Session for Planning:</span>
+                <select 
+                  value={activeSessionId}
+                  onChange={(e) => handleActivateSession(parseInt(e.target.value))}
+                  className="input-field"
+                  style={{ width: 'auto', minWidth: '260px', padding: '0.4rem 2rem 0.4rem 1rem', cursor: 'pointer', fontWeight: 600 }}
+                >
+                  {sessions.map(s => (
+                    <option key={s.id} value={s.id}>
+                      {s.name} {s.is_active ? '(Active)' : ''}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               {/* Section 1: Campus Inventory and Uploads */}
               <div className="grid-2">
                 
