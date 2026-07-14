@@ -1,8 +1,9 @@
 import uvicorn
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from backend.database import init_db
+from backend.database import init_db, get_db_connection
 from backend.routes import router
 
 @asynccontextmanager
@@ -17,6 +18,30 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan
 )
+
+@app.middleware("http")
+async def admin_auth_middleware(request: Request, call_next):
+    if request.url.path.startswith("/api/admin/") and request.url.path != "/api/admin/login":
+        auth_header = request.headers.get("Authorization")
+        if not auth_header:
+            return JSONResponse(status_code=401, content={"detail": "Authorization Header Missing"})
+        parts = auth_header.split()
+        if len(parts) != 2 or parts[0].lower() != "bearer":
+            return JSONResponse(status_code=401, content={"detail": "Invalid header format. Use 'Bearer <token>'"})
+        token = parts[1]
+        
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT value FROM settings WHERE key = 'admin_password'")
+        row = cursor.fetchone()
+        conn.close()
+        actual_pass = row["value"] if row else "admin123"
+        
+        if token != f"token-{actual_pass}":
+            return JSONResponse(status_code=401, content={"detail": "Invalid or expired session token"})
+            
+    response = await call_next(request)
+    return response
 
 # Enable CORS for frontend integration
 app.add_middleware(

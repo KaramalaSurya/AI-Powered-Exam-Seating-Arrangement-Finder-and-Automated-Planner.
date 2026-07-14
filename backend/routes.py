@@ -13,6 +13,10 @@ import backend.reports as reports
 router = APIRouter()
 
 # --- Pydantic Schemas ---
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
 class SeedRoomsRequest(BaseModel):
     session_id: int
     text_content: str
@@ -423,6 +427,20 @@ import io
 # ==========================================
 #      PLANNER & ALLOCATION API ENDPOINTS
 # ==========================================
+
+@router.post("/admin/login")
+def admin_login(data: LoginRequest):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("SELECT value FROM settings WHERE key = 'admin_password'")
+        row = cursor.fetchone()
+        actual_pass = row["value"] if row else "admin123"
+        if data.username == "admin" and data.password == actual_pass:
+            return {"success": True, "token": f"token-{actual_pass}"}
+        raise HTTPException(status_code=401, detail="Invalid username or password")
+    finally:
+        conn.close()
 
 @router.post("/admin/seed-rooms")
 def seed_rooms_endpoint(data: SeedRoomsRequest):

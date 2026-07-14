@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import StudentSearch from './components/StudentSearch';
 import AdminPortal from './components/AdminPortal';
+import AdminLogin from './components/AdminLogin';
 import { GraduationCap, User, ShieldCheck, HelpCircle } from 'lucide-react';
 
 export default function App() {
   const [view, setView] = useState('student'); // 'student', 'admin'
   const [backendStatus, setBackendStatus] = useState('checking'); // 'checking', 'online', 'offline'
+  const [adminToken, setAdminToken] = useState(localStorage.getItem('admin_token') || '');
 
   useEffect(() => {
     // Check if backend API is online
@@ -82,7 +84,14 @@ export default function App() {
         {view === 'student' ? (
           <StudentSearch />
         ) : (
-          <AdminPortal />
+          adminToken ? (
+            <AdminPortal token={adminToken} onLogout={() => {
+              localStorage.removeItem('admin_token');
+              setAdminToken('');
+            }} />
+          ) : (
+            <AdminLogin onLoginSuccess={(token) => setAdminToken(token)} />
+          )
         )}
       </main>
 

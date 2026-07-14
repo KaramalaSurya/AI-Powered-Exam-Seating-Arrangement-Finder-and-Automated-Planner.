@@ -135,6 +135,11 @@ def init_db():
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, sample_ranges)
 
+    # Insert default admin password if not exists
+    cursor.execute("SELECT COUNT(*) FROM settings WHERE key = 'admin_password'")
+    if cursor.fetchone()[0] == 0:
+        cursor.execute("INSERT INTO settings (key, value) VALUES ('admin_password', 'admin123')")
+
     conn.commit()
     conn.close()
 

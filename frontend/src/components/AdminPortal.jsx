@@ -62,7 +62,17 @@ function expandRangeList(prefix, startStr, endStr) {
   return list;
 }
 
-export default function AdminPortal() {
+export default function AdminPortal({ token, onLogout }) {
+  const fetch = (url, options = {}) => {
+    return window.fetch(url, {
+      ...options,
+      headers: {
+        ...options.headers,
+        'Authorization': `Bearer ${token}`
+      }
+    });
+  };
+
   const [sessions, setSessions] = useState([]);
   const [activeSessionId, setActiveSessionId] = useState('');
   const [newSessionName, setNewSessionName] = useState('');
@@ -779,6 +789,13 @@ Third Floor: SB-302 (Smart Classroom), SB-303, SB-304, SB-305, SB-306, SB-308, S
           style={{ borderRadius: '8px' }}
         >
           <Settings size={16} /> AI Settings
+        </button>
+        <button 
+          onClick={onLogout} 
+          className="nav-btn"
+          style={{ borderRadius: '8px', marginLeft: 'auto', color: '#ef4444', borderColor: 'rgba(239, 68, 68, 0.2)' }}
+        >
+          Logout
         </button>
       </div>
 
