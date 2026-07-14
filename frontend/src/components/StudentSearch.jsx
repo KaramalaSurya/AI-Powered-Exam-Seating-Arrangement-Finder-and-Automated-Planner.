@@ -95,7 +95,70 @@ export default function StudentSearch() {
 
   return (
     <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-      
+      {/* Search Bar Panel */}
+      <div className="glass-panel" style={{ padding: '2rem' }}>
+        <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', fontWeight: 700 }}>Find Your Seating</h2>
+        <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginBottom: '1.5rem' }}>
+          Enter your 10-character college roll number to instantly retrieve your exam block, room, and seat coordinates.
+        </p>
+
+        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+          <div style={{ flex: 1, minWidth: '280px', position: 'relative' }}>
+            <input
+              type="text"
+              placeholder="e.g. 23711A0518"
+              value={rollNumber}
+              onChange={(e) => setRollNumber(e.target.value.toUpperCase())}
+              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              className="input-field"
+              style={{ width: '100%', paddingLeft: '3rem', textTransform: 'uppercase' }}
+            />
+            <Search 
+              size={18} 
+              style={{ position: 'absolute', left: '1.2rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} 
+            />
+          </div>
+          <button 
+            onClick={() => handleSearch()} 
+            disabled={loading} 
+            className="btn-primary"
+            style={{ minWidth: '140px' }}
+          >
+            {loading ? <RefreshCw className="spinner" size={18} /> : <Search size={18} />}
+            {loading ? 'Searching...' : 'Search'}
+          </button>
+        </div>
+
+        {/* Suggestion tags */}
+        <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
+          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>Try Demo Rolls:</span>
+          {suggestions.map((s) => (
+            <button
+              key={s.roll}
+              onClick={() => {
+                setRollNumber(s.roll);
+                handleSearch(s.roll);
+              }}
+              style={{
+                background: 'rgba(255,255,255,0.05)',
+                border: '1px solid var(--border-color)',
+                padding: '0.3rem 0.75rem',
+                borderRadius: '15px',
+                fontSize: '0.75rem',
+                color: 'var(--primary)',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'var(--transition-fast)'
+              }}
+              onMouseEnter={(e) => e.target.style.background = 'rgba(59,130,246,0.1)'}
+              onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.05)'}
+            >
+              {s.roll} ({s.label.split(' ')[0]})
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Active Exam Sessions Status Dashboard */}
       {activeSlots.length > 0 && (
         <div style={{ marginTop: '0.5rem' }}>
@@ -240,70 +303,6 @@ export default function StudentSearch() {
           </div>
         </div>
       )}
-
-      {/* Search Bar Panel */}
-      <div className="glass-panel" style={{ padding: '2rem' }}>
-        <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', fontWeight: 700 }}>Find Your Seating</h2>
-        <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginBottom: '1.5rem' }}>
-          Enter your 10-character college roll number to instantly retrieve your exam block, room, and seat coordinates.
-        </p>
-
-        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          <div style={{ flex: 1, minWidth: '280px', position: 'relative' }}>
-            <input
-              type="text"
-              placeholder="e.g. 23711A0518"
-              value={rollNumber}
-              onChange={(e) => setRollNumber(e.target.value.toUpperCase())}
-              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-              className="input-field"
-              style={{ width: '100%', paddingLeft: '3rem', textTransform: 'uppercase' }}
-            />
-            <Search 
-              size={18} 
-              style={{ position: 'absolute', left: '1.2rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} 
-            />
-          </div>
-          <button 
-            onClick={() => handleSearch()} 
-            disabled={loading} 
-            className="btn-primary"
-            style={{ minWidth: '140px' }}
-          >
-            {loading ? <RefreshCw className="spinner" size={18} /> : <Search size={18} />}
-            {loading ? 'Searching...' : 'Search'}
-          </button>
-        </div>
-
-        {/* Suggestion tags */}
-        <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
-          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>Try Demo Rolls:</span>
-          {suggestions.map((s) => (
-            <button
-              key={s.roll}
-              onClick={() => {
-                setRollNumber(s.roll);
-                handleSearch(s.roll);
-              }}
-              style={{
-                background: 'rgba(255,255,255,0.05)',
-                border: '1px solid var(--border-color)',
-                padding: '0.3rem 0.75rem',
-                borderRadius: '15px',
-                fontSize: '0.75rem',
-                color: 'var(--primary)',
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'var(--transition-fast)'
-              }}
-              onMouseEnter={(e) => e.target.style.background = 'rgba(59,130,246,0.1)'}
-              onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.05)'}
-            >
-              {s.roll} ({s.label.split(' ')[0]})
-            </button>
-          ))}
-        </div>
-      </div>
 
       {/* Error Message */}
       {error && (
