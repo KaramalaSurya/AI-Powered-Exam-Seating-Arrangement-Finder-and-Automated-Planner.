@@ -13,10 +13,12 @@ export default function StudentSearch() {
   useEffect(() => {
     const fetchActiveSession = async () => {
       try {
-        const res = await fetch('http://localhost:8085/api/admin/dashboard-stats');
+        const res = await fetch('http://localhost:8085/api/student/active-sessions');
         const data = await res.json();
-        if (data.active_session && data.active_session !== 'None') {
-          setActiveSession(data.active_session);
+        if (Array.isArray(data) && data.length > 0) {
+          setActiveSession(data.map(s => s.name).join(', '));
+        } else {
+          setActiveSession('None');
         }
       } catch (e) {
         console.error('Failed to fetch active session:', e);
