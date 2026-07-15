@@ -106,7 +106,7 @@ export default function StudentSearch() {
           Enter your 10-character college roll number to instantly retrieve your exam block, room, and seat coordinates.
         </p>
 
-        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+        <div className="search-row">
 
           <div style={{ flex: 1, minWidth: '280px', position: 'relative' }}>
             <input
@@ -343,7 +343,7 @@ export default function StudentSearch() {
             </div>
 
             {/* Info Fields */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+            <div className="slip-info-grid">
               <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border-color)' }}>
                   <User size={18} style={{ color: 'var(--primary)' }} />
@@ -406,7 +406,7 @@ export default function StudentSearch() {
             </div>
 
             {/* QR Code and Actions */}
-            <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid var(--border-color)' }}>
+            <div className="slip-footer">
               <div>
                 <img
                   src={`https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(`MITS-Exam: Roll ${result.roll_number}, Block ${result.seating_details.block}, Room ${result.seating_details.room_name}, Seat ${result.seating_details.seat_number}`)}`}

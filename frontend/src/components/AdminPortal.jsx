@@ -817,8 +817,7 @@ Third Floor: SB-302 (Smart Classroom), SB-303, SB-304, SB-305, SB-306, SB-308, S
         </div>
       </div>
 
-      {/* Admin Tab Controls */}
-      <div style={{ display: 'flex', gap: '1rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.5rem' }}>
+      <div className="admin-tab-controls">
         <button 
           onClick={() => setTab('upload')} 
           className={`nav-btn ${tab === 'upload' ? 'active' : ''}`}
@@ -1309,7 +1308,7 @@ Floor: Room1, Room2, ..."
                     Upload Excel or PDF files to ingest student registrations (PIN lists) and the master schedule slots. These are stored securely to generate the mixed layouts.
                   </p>
                   
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '0.5rem' }}>
+                  <div className="upload-buttons-grid">
                     {/* Student Registration upload */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                       <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)' }}>
@@ -1596,13 +1595,16 @@ Floor: Room1, Room2, ..."
                               FRONT OF ROOM (PROCTOR TABLE / BLACKBOARD)
                             </div>
                             
-                            <div style={{
-                              display: 'grid',
-                              gridTemplateColumns: 'repeat(4, 1fr)',
-                              gap: '0.5rem',
-                              width: '100%',
-                              maxWidth: '550px'
-                            }}>
+                            <div style={{ width: '100%', overflowX: 'auto', paddingBottom: '0.5rem' }}>
+                              <div style={{
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(4, 1fr)',
+                                gap: '0.5rem',
+                                width: '100%',
+                                minWidth: '480px',
+                                maxWidth: '550px',
+                                margin: '0 auto'
+                              }}>
                               {/* Draw grid seats (rows = 6, cols = 4) */}
                               {Array.from({ length: 6 }).map((_, rIdx) => 
                                 Array.from({ length: 4 }).map((_, cIdx) => {
@@ -1718,6 +1720,7 @@ Floor: Room1, Room2, ..."
                               )}
                             </div>
                           </div>
+                        </div>
                         </div>
                       ))}
                     </div>

@@ -46,7 +46,7 @@ export default function App() {
         </a>
 
         {/* View Switch Tabs */}
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+        <div className="header-actions">
           {/* Server Connection Status Badge */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.75rem', marginRight: '1rem' }}>
             <span style={{ 

@@ -117,7 +117,7 @@ class OCRAgent:
                     "Extract all text, including tables, room allocations, block details, and roll number ranges. "
                     "Maintain the structure of the document as much as possible."
                 )
-                response = model.generate_content([prompt, image])
+                response = model.generate_content([prompt, image], request_options={"timeout": 10.0})
                 return response.text
             except Exception as e:
                 return f"[Gemini Vision OCR Error: {str(e)}]. Falling back to local simulated OCR."
@@ -289,7 +289,7 @@ class LLMParsingAgent:
                     "Return ONLY a valid JSON list of objects. Do not include markdown code block formatting or any explanation text."
                 )
                 
-                response = model.generate_content(f"{system_prompt}\n\nRaw Text:\n{raw_text}")
+                response = model.generate_content(f"{system_prompt}\n\nRaw Text:\n{raw_text}", request_options={"timeout": 10.0})
                 response_text = response.text.strip()
                 
                 # Remove markdown ```json ... ``` wrapper if present
