@@ -32,8 +32,8 @@ export default function App() {
       {/* Top Navigation & Branding Header */}
       <header className="animate-fade-in">
         <a href="/" className="logo" onClick={(e) => { e.preventDefault(); setView('student'); }}>
-          <div className="logo-icon">
-            <GraduationCap size={24} style={{ color: 'white' }} />
+          <div className="logo-icon" style={{ background: '#ffffff', padding: '3px', boxShadow: '0 0 10px rgba(255,255,255,0.1)' }}>
+            <img src="/favicon.png" alt="Alloc8 Logo" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '8px' }} />
           </div>
           <div>
             <h1 style={{ fontSize: 'inherit', fontWeight: 'inherit', margin: 0, padding: 0, display: 'inline' }}>
