@@ -577,10 +577,15 @@ header {
 /* Print styles for Seating Slip */
 /* Print styles for Seating Slip and Classroom Layout */
 @media print {
+  @page {
+    margin: 0 !important;
+  }
+
   body {
     background: #ffffff !important;
     color: #000000 !important;
     background-image: none !important;
+    padding: 2cm !important;
   }
 
   /* Hide non-printable elements */
