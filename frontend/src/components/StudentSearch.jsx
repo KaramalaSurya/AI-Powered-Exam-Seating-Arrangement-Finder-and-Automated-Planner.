@@ -169,6 +169,151 @@ export default function StudentSearch() {
         </div>
       </div>
 
+      {/* Active Exam Sessions Status Dashboard */}
+      {activeSlots.length > 0 && (
+        <div style={{ marginTop: '0.5rem' }}>
+          {/* Header block with legend */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem' }}>
+            <div>
+              <h2 style={{ fontSize: '1.75rem', fontWeight: 800, margin: 0, color: 'var(--text-main)' }}>Active Exam Sessions</h2>
+              <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', margin: '0.25rem 0 0 0' }}>
+                Real-time status of departmental seating arrangements.
+              </p>
+            </div>
+            
+            {/* Status Legend indicators */}
+            <div style={{ display: 'flex', gap: '0.75rem', fontSize: '0.75rem', fontWeight: 600 }}>
+              <span style={{ 
+                background: 'rgba(16, 185, 129, 0.05)', 
+                color: 'var(--accent)', 
+                border: '1px solid rgba(16, 185, 129, 0.15)', 
+                padding: '0.35rem 0.75rem', 
+                borderRadius: '6px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem'
+              }}>
+                <span style={{ width: '6px', height: '6px', background: 'var(--accent)', borderRadius: '50%', display: 'inline-block' }} />
+                Seating Published
+              </span>
+              <span style={{ 
+                background: 'rgba(255,255,255,0.03)', 
+                color: 'var(--text-muted)', 
+                border: '1px solid var(--border-color)', 
+                padding: '0.35rem 0.75rem', 
+                borderRadius: '6px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem'
+              }}>
+                <span style={{ width: '6px', height: '6px', background: '#94a3b8', borderRadius: '50%', display: 'inline-block' }} />
+                Draft Phase / Processing
+              </span>
+            </div>
+          </div>
+
+          {/* Cards Grid */}
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
+            gap: '1.5rem' 
+          }}>
+            {activeSlots.map((slot, index) => {
+              const isPublished = slot.status === 'Published';
+              return (
+                <div 
+                  key={index} 
+                  className="glass-panel" 
+                  style={{ 
+                    padding: '1.5rem', 
+                    position: 'relative',
+                    borderLeft: isPublished ? '4px solid var(--accent)' : '4px solid #64748b',
+                    opacity: isPublished ? 1 : 0.75,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    minHeight: '200px'
+                  }}
+                >
+                  <div>
+                    {/* Header: Department + Status Badge */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                      <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.05em' }}>
+                        {slot.department}
+                      </span>
+                      {isPublished ? (
+                        <span style={{ color: 'var(--accent)', fontSize: '0.75rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+                          ✓ Published
+                        </span>
+                      ) : (
+                        <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                          <RefreshCw size={12} className="spinner" style={{ animationDuration: '3s' }} /> Processing
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Course Code & Title */}
+                    <h3 style={{ fontSize: '1.15rem', fontWeight: 800, margin: '0 0 0.5rem 0', color: 'var(--text-main)', lineHeight: 1.3 }}>
+                      {slot.subject_code}: {slot.subject_name}
+                    </h3>
+                    
+                    {/* Exam Location */}
+                    <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
+                      {slot.exam_hall}
+                    </p>
+                  </div>
+
+                  {/* Footer Stats section */}
+                  <div style={{ marginTop: '1.25rem' }}>
+                    <div style={{ borderTop: '1px solid var(--border-color)', margin: '0.5rem 0' }} />
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '0.25rem' }}>
+                      <div>
+                        <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: 700, display: 'block', letterSpacing: '0.05em' }}>STUDENTS</span>
+                        <strong style={{ fontSize: '1.15rem', color: 'var(--text-main)' }}>{slot.students_count}</strong>
+                      </div>
+                      
+                      {isPublished ? (
+                        <button 
+                          onClick={() => {
+                            if (slot.subject_name.toLowerCase().includes('machine')) {
+                              setRollNumber('24691A0505');
+                              handleSearch('24691A0505');
+                            } else if (slot.subject_name.toLowerCase().includes('deep')) {
+                              setRollNumber('24691A3101');
+                              handleSearch('24691A3101');
+                            }
+                          }}
+                          style={{
+                            background: 'rgba(255,255,255,0.03)',
+                            border: '1px solid var(--border-color)',
+                            borderRadius: '50%',
+                            width: '32px',
+                            height: '32px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer',
+                            color: 'var(--text-main)',
+                            transition: 'all 0.2s'
+                          }}
+                          title="Auto-fill and search sample student roll"
+                        >
+                          →
+                        </button>
+                      ) : (
+                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
+                          ETA: 10m
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
 
 
       {/* Error Message */}
@@ -289,7 +434,7 @@ export default function StudentSearch() {
           </div>
 
           {/* Interactive Classroom Grid View */}
-          <div className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <div className="glass-panel print-layout" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
                 <h3 style={{ fontSize: '1.25rem', fontWeight: 700 }}>Classroom Layout</h3>

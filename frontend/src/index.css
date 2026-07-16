@@ -594,10 +594,7 @@ header {
   .search-row,
   .no-print,
   button,
-  .classroom-map-container,
-  .classroom-grid,
-  .podium-screen,
-  .glass-panel:not(.print-slip) {
+  .glass-panel:not(.print-slip):not(.print-layout) {
     display: none !important;
   }
 
@@ -725,6 +722,95 @@ header {
   /* Hide print buttons */
   .print-slip button {
     display: none !important;
+  }
+
+  /* Style the print layout beautifully for print */
+  .print-layout {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 2px solid #000000 !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+    padding: 2rem !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 2rem auto 0 auto !important;
+    box-sizing: border-box !important;
+    page-break-before: always; /* Force the Classroom Layout to start on a new page */
+  }
+
+  /* Ensure text colors inside the layout are readable in print */
+  .print-layout h3,
+  .print-layout p,
+  .print-layout span,
+  .print-layout div {
+    color: #000000 !important;
+  }
+
+  /* Legend visibility adjustments */
+  .print-layout div[style*="display: flex"][style*="gap: 0.75rem"] span {
+    color: #000000 !important;
+  }
+
+  .print-layout div[style*="display: flex"][style*="gap: 0.75rem"] span span {
+    border: 1px solid #000000 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Podium screen representation in print */
+  .print-layout .podium-screen {
+    border: 2px solid #000000 !important;
+    background: #f3f4f6 !important;
+    color: #000000 !important;
+    margin-bottom: 1.5rem !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Bench Cells in print */
+  .print-layout .bench-cell {
+    background: #ffffff !important;
+    border: 1px solid #000000 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Individual seats in print */
+  .print-layout .seat {
+    background: #f9fafb !important;
+    border: 1px solid #9ca3af !important;
+    color: #000000 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Empty/Vacant seats in print */
+  .print-layout .seat.empty {
+    border: 1px dashed #d1d5db !important;
+    background: #ffffff !important;
+    opacity: 0.3 !important;
+  }
+
+  /* Highlighted student's seat in print */
+  .print-layout .seat.my-seat {
+    background: #000000 !important; /* solid black background for high contrast on print */
+    color: #ffffff !important;
+    border: 2px solid #000000 !important;
+    box-shadow: none !important;
+    animation: none !important;
+    transform: none !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .print-layout .seat.my-seat * {
+    color: #ffffff !important;
+  }
+
+  /* Make sure seat labels are dark and legible */
+  .print-layout .seat-label {
+    color: #4b5563 !important;
   }
 }
 
