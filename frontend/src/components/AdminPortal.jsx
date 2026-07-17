@@ -1064,7 +1064,7 @@ Third Floor: SB-302 (Smart Classroom), SB-303, SB-304, SB-305, SB-306, SB-308, S
                           <input type="text" value={row.subject} onChange={(e) => handleRangeEdit(index, 'subject', e.target.value)} className="input-field" style={{ padding: '0.4rem', fontSize: '0.8rem', width: '150px' }} />
                         </td>
                         <td style={{ padding: '0.5rem' }}>
-                          <input type="text" value={row.exam_date} onChange={(e) => handleRangeEdit(index, 'exam_date', e.target.value)} className="input-field" style={{ padding: '0.4rem', fontSize: '0.75rem', width: '90px', marginBottom: '0.2rem' }} />
+                          <input type="date" value={row.exam_date} onChange={(e) => handleRangeEdit(index, 'exam_date', e.target.value)} className="input-field" style={{ padding: '0.4rem', fontSize: '0.75rem', width: '125px', marginBottom: '0.2rem', colorScheme: 'dark' }} />
                           <input type="text" value={row.exam_time} onChange={(e) => handleRangeEdit(index, 'exam_time', e.target.value)} className="input-field" style={{ padding: '0.4rem', fontSize: '0.75rem', width: '120px' }} />
                         </td>
                         <td style={{ padding: '0.5rem' }}>
