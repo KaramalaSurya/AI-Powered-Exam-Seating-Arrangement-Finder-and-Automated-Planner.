@@ -302,6 +302,7 @@ Third Floor: SB-302 (Smart Classroom), SB-303, SB-304, SB-305, SB-306, SB-308, S
       if (res.ok) {
         alert(`Successfully ingested ${data.count} student registration records.`);
         fetchPlannerStatus(activeSessionId);
+        fetchRegistrationSubjects(activeSessionId);
       } else {
         alert(data.detail || 'Failed to ingest students list.');
       }
