@@ -1561,11 +1561,25 @@ Floor: Room1, Room2, ..."
                       >
                         {(() => {
                           const blocks = ['All'];
-                          classroomText.split('\n').forEach(line => {
+                          const lines = classroomText.split('\n');
+                          const floorIndicators = ["floor", "ground", "first", "second", "third", "fourth", "fifth", "sixth", 
+                                                   "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth", "thirteenth", 
+                                                   "fourteenth", "fifteenth", "sixteenth"];
+                          lines.forEach(line => {
                             const trimmed = line.trim();
-                            if (trimmed && !trimmed.includes(':')) {
-                              if (!blocks.includes(trimmed)) {
-                                blocks.push(trimmed);
+                            if (!trimmed) return;
+                            
+                            const clean = trimmed.replace(/^[-*+\d.\s]+/, '').trim();
+                            if (!clean) return;
+                            
+                            const lower = clean.toLowerCase();
+                            const isFloor = floorIndicators.some(ind => lower.includes(ind));
+                            const hasRooms = clean.includes(',') || clean.includes(';');
+                            const hasSeparator = clean.includes(':') || (clean.includes('-') && hasRooms);
+                            
+                            if (!hasSeparator && !hasRooms && !isFloor) {
+                              if (!blocks.includes(clean)) {
+                                blocks.push(clean);
                               }
                             }
                           });
