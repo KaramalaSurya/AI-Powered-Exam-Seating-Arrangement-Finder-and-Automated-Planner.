@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Search, MapPin, Calendar, Clock, BookOpen, Download, User, QrCode, RefreshCw, Bell } from 'lucide-react';
 import { API_BASE_URL } from '../config';
 
 
@@ -104,68 +103,109 @@ export default function StudentSearch() {
 
   return (
     <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-      {/* Search Bar Panel */}
-      <div className="glass-panel" style={{ padding: '2rem' }}>
-        <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', fontWeight: 700 }}>Find Your Seating</h2>
-        <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginBottom: '1.5rem' }}>
-          Enter your 10-character college roll number to instantly retrieve your exam block, room, and seat coordinates.
-        </p>
+      {/* Side-by-Side Search and Instructions Panel */}
+      <div className="grid-2">
+        {/* Finder Form Panel */}
+        <div className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', fontWeight: 800, color: 'var(--primary)' }}>Find Your Seating</h2>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '1.5rem' }}>
+            Enter your 10-character college roll number to instantly retrieve your exam block, room, and seat coordinates.
+          </p>
 
-        <div className="search-row">
-
-          <div style={{ flex: 1, minWidth: '280px', position: 'relative' }}>
-            <input
-              type="text"
-              placeholder="e.g. 23711A0518"
-              value={rollNumber}
-              onChange={(e) => setRollNumber(e.target.value.toUpperCase())}
-              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-              className="input-field"
-              style={{ width: '100%', paddingLeft: '3rem', textTransform: 'uppercase' }}
-            />
-            <Search 
-              size={18} 
-              style={{ position: 'absolute', left: '1.2rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} 
-            />
+          <div className="search-row">
+            <div style={{ flex: 1, minWidth: '280px', position: 'relative' }}>
+              <input
+                type="text"
+                placeholder="e.g. 23711A0518"
+                value={rollNumber}
+                onChange={(e) => setRollNumber(e.target.value.toUpperCase())}
+                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                className="input-field"
+                style={{ width: '100%', paddingLeft: '3rem', textTransform: 'uppercase' }}
+              />
+              <img 
+                src="https://img.icons8.com/ios-glyphs/24/4b5563/search.png" 
+                style={{ position: 'absolute', left: '1.2rem', top: '50%', transform: 'translateY(-50%)', width: '18px', height: '18px', objectFit: 'contain' }} 
+                alt="" 
+              />
+            </div>
+            <button 
+              onClick={() => handleSearch()} 
+              disabled={loading} 
+              className="btn-primary"
+              style={{ minWidth: '140px' }}
+            >
+              {loading ? (
+                <img src="https://img.icons8.com/ios-glyphs/24/ffffff/rotate.png" className="spinner" style={{ width: '18px', height: '18px', objectFit: 'contain' }} alt="" />
+              ) : (
+                <img src="https://img.icons8.com/ios-glyphs/24/ffffff/search.png" style={{ width: '18px', height: '18px', objectFit: 'contain' }} alt="" />
+              )}
+              {loading ? 'Searching...' : 'Search'}
+            </button>
           </div>
-          <button 
-            onClick={() => handleSearch()} 
-            disabled={loading} 
-            className="btn-primary"
-            style={{ minWidth: '140px' }}
-          >
-            {loading ? <RefreshCw className="spinner" size={18} /> : <Search size={18} />}
-            {loading ? 'Searching...' : 'Search'}
-          </button>
+
+          {/* Suggestion tags */}
+          <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
+            <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>Try Demo Rolls:</span>
+            {suggestions.map((s) => (
+              <button
+                key={s.roll}
+                onClick={() => {
+                  setRollNumber(s.roll);
+                  handleSearch(s.roll);
+                }}
+                style={{
+                  background: '#f3f4f6',
+                  border: '1px solid #d1d5db',
+                  padding: '0.3rem 0.75rem',
+                  borderRadius: '4px',
+                  fontSize: '0.75rem',
+                  color: '#111827',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'var(--transition-fast)'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = '#e5e7eb';
+                  e.target.style.borderColor = '#9ca3af';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = '#f3f4f6';
+                  e.target.style.borderColor = '#d1d5db';
+                }}
+              >
+                {s.roll} ({s.label.split(' ')[0]})
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Suggestion tags */}
-        <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
-          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600 }}>Try Demo Rolls:</span>
-          {suggestions.map((s) => (
-            <button
-              key={s.roll}
-              onClick={() => {
-                setRollNumber(s.roll);
-                handleSearch(s.roll);
-              }}
-              style={{
-                background: 'rgba(255,255,255,0.05)',
-                border: '1px solid var(--border-color)',
-                padding: '0.3rem 0.75rem',
-                borderRadius: '15px',
-                fontSize: '0.75rem',
-                color: 'var(--primary)',
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'var(--transition-fast)'
-              }}
-              onMouseEnter={(e) => e.target.style.background = 'rgba(59,130,246,0.1)'}
-              onMouseLeave={(e) => e.target.style.background = 'rgba(255,255,255,0.05)'}
-            >
-              {s.roll} ({s.label.split(' ')[0]})
-            </button>
-          ))}
+        {/* MITS Seating Instructions Notice Board panel */}
+        <div className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.25rem', background: '#fafafa', borderLeft: '4px solid var(--primary)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <span style={{ width: '8px', height: '8px', background: '#dc2626', borderRadius: '50%', display: 'inline-block' }} />
+            <h3 style={{ fontSize: '1.15rem', fontWeight: 800, margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              EXAMINATION BRANCH NOTICE BOARD
+            </h3>
+          </div>
+          
+          <ul style={{ paddingLeft: '1.2rem', margin: 0, fontSize: '0.82rem', color: 'var(--text-muted)', display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+            <li>
+              <strong>Mandatory Identification:</strong> All candidates must carry their physical Hall Ticket and college ID card to the exam venue.
+            </li>
+            <li>
+              <strong>Reporting Time:</strong> Candidates must report to their respective exam halls at least <strong>15 minutes</strong> before the scheduled exam start time.
+            </li>
+            <li>
+              <strong>Seating System:</strong> Seating arrangements follow the right-to-left serpentine zig-zag bench numbering scheme starting at bench <code>001</code>.
+            </li>
+            <li>
+              <strong>Prohibited Items:</strong> Mobile phones, smartwatches, study notes, and programmable calculators are strictly forbidden inside the hall.
+            </li>
+            <li>
+              <strong>Support:</strong> In case of discrepancy or query, report immediately to the Block In-charge or Chief Superintendent.
+            </li>
+          </ul>
         </div>
       </div>
 
@@ -247,7 +287,7 @@ export default function StudentSearch() {
                         </span>
                       ) : (
                         <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                          <RefreshCw size={12} className="spinner" style={{ animationDuration: '3s' }} /> Processing
+                          <img src="https://img.icons8.com/ios-glyphs/24/4b5563/rotate.png" className="spinner" style={{ width: '12px', height: '12px', objectFit: 'contain', animationDuration: '3s' }} alt="" /> Processing
                         </span>
                       )}
                     </div>
@@ -284,16 +324,16 @@ export default function StudentSearch() {
                             }
                           }}
                           style={{
-                            background: 'rgba(255,255,255,0.03)',
-                            border: '1px solid var(--border-color)',
-                            borderRadius: '50%',
+                            background: '#f3f4f6',
+                            border: '1px solid #d1d5db',
+                            borderRadius: '4px',
                             width: '32px',
                             height: '32px',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             cursor: 'pointer',
-                            color: 'var(--text-main)',
+                            color: '#111827',
                             transition: 'all 0.2s'
                           }}
                           title="Auto-fill and search sample student roll"
@@ -354,7 +394,7 @@ export default function StudentSearch() {
             <div className="slip-info-grid">
               <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border-color)' }}>
-                  <User size={18} style={{ color: 'var(--primary)' }} />
+                  <img src="https://img.icons8.com/ios-glyphs/24/1e3a8a/user.png" style={{ width: '18px', height: '18px', objectFit: 'contain' }} alt="" />
                 </div>
                 <div>
                   <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Roll Number</p>
@@ -364,7 +404,7 @@ export default function StudentSearch() {
 
               <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border-color)' }}>
-                  <MapPin size={18} style={{ color: 'var(--secondary)' }} />
+                  <img src="https://img.icons8.com/ios-glyphs/24/1d4ed8/map-pin.png" style={{ width: '18px', height: '18px', objectFit: 'contain' }} alt="" />
                 </div>
                 <div>
                   <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Exam Block</p>
@@ -374,7 +414,7 @@ export default function StudentSearch() {
 
               <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border-color)' }}>
-                  <BookOpen size={18} style={{ color: 'var(--accent)' }} />
+                  <img src="https://img.icons8.com/ios-glyphs/24/16a34a/open-book.png" style={{ width: '18px', height: '18px', objectFit: 'contain' }} alt="" />
                 </div>
                 <div>
                   <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Subject & Room</p>
@@ -384,7 +424,7 @@ export default function StudentSearch() {
 
               <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: 'rgba(255,255,255,0.03)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--border-color)' }}>
-                  <Calendar size={18} style={{ color: 'var(--warning)' }} />
+                  <img src="https://img.icons8.com/ios-glyphs/24/d97706/calendar.png" style={{ width: '18px', height: '18px', objectFit: 'contain' }} alt="" />
                 </div>
                 <div>
                   <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Date & Time</p>
@@ -422,17 +462,17 @@ export default function StudentSearch() {
             <div className="slip-footer">
               <div>
                 <img
-                  src={`https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(`MITS-Exam: Roll ${result.roll_number}, Block ${result.seating_details.block}, Room ${result.seating_details.room_name}, Seat ${result.seating_details.seat_number}`)}`}
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent(`Exam-System: Roll ${result.roll_number}, Block ${result.seating_details.block}, Room ${result.seating_details.room_name}, Seat ${result.seating_details.seat_number}`)}`}
                   alt="Seating QR Code"
                   style={{ background: 'white', padding: '4px', borderRadius: '6px', width: '90px', height: '90px' }}
                 />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', flex: 1 }}>
                 <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                  <QrCode size={12} /> Scan QR with mobile for fast navigation on campus exam day.
+                  <img src="https://img.icons8.com/ios-glyphs/24/4b5563/qr-code.png" style={{ width: '12px', height: '12px', objectFit: 'contain' }} alt="" /> Scan QR with mobile for fast navigation on campus exam day.
                 </p>
-                <button onClick={handlePrint} className="btn-secondary no-print" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', width: '100%' }}>
-                  <Download size={16} /> Print Seating Slip
+                <button onClick={handlePrint} className="btn-secondary no-print" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem' }}>
+                  <img src="https://img.icons8.com/ios-glyphs/24/000000/download.png" style={{ width: '16px', height: '16px', objectFit: 'contain' }} alt="" /> Print Seating Slip
                 </button>
               </div>
             </div>

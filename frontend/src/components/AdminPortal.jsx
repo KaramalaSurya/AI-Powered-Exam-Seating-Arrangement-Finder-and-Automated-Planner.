@@ -90,7 +90,7 @@ export default function AdminPortal({ token, onLogout }) {
   const [activeSessionId, setActiveSessionId] = useState('');
   const [newSessionName, setNewSessionName] = useState('');
   const [studentsPerBench, setStudentsPerBench] = useState(1);
-  const [useAiIngestion, setUseAiIngestion] = useState(false);
+  const [useAiIngestion, setUseAiIngestion] = useState(true);
   
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
   const [deleteConfirmName, setDeleteConfirmName] = useState('');
@@ -695,7 +695,7 @@ Third Floor: SB-302 (Smart Classroom), SB-303, SB-304, SB-305, SB-306, SB-308, S
   // Generate Mock text data for testing
   const handleLoadMockNotice = async () => {
     const mockText = `
-    MITS COLLEGE EXAMS
+    COLLEGE EXAMS
     Date: 2026-07-06  Time: 10:00 AM - 01:00 PM
     
     Block: CSE Block (Block B)
@@ -995,18 +995,6 @@ Third Floor: SB-302 (Smart Classroom), SB-303, SB-304, SB-305, SB-306, SB-308, S
                   </div>
                 </label>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center', margin: '0.25rem 0' }}>
-                  <input
-                    type="checkbox"
-                    id="use-ai-ingestion"
-                    checked={useAiIngestion}
-                    onChange={(e) => setUseAiIngestion(e.target.checked)}
-                    style={{ cursor: 'pointer', width: '16px', height: '16px' }}
-                  />
-                  <label htmlFor="use-ai-ingestion" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)', cursor: 'pointer' }}>
-                    Use AI Ingestion & OCR Extraction (Requires configured Gemini API key)
-                  </label>
-                </div>
  
                 <div style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
                   <span>— OR —</span>
