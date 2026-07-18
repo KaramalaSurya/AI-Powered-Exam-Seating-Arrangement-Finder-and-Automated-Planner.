@@ -64,13 +64,13 @@ export default function App() {
       <div className="container">
         {/* Top Navigation & Branding Header */}
         <header className="animate-fade-in" style={{ marginTop: '1rem' }}>
-          <a href="/" className="logo" onClick={(e) => { e.preventDefault(); setView('student'); }} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.5rem' }}>
-            <img src="/favicon.png" alt="Alloc8 Logo" style={{ height: '48px', objectFit: 'contain', background: '#ffffff', padding: '6px 16px', borderRadius: '4px', border: '2px solid #000000' }} />
-            {view === 'admin' && (
-              <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.03em', textTransform: 'uppercase', margin: 0 }}>
-                AI-Powered Examination Seating Planning and Student Seating Finder System
-              </p>
-            )}
+          <a href="/" className="logo" onClick={(e) => { e.preventDefault(); setView('student'); }} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.35rem' }}>
+            <span style={{ fontSize: '1.8rem', fontWeight: 800, color: 'var(--text-main)', letterSpacing: '0.02em' }}>
+              SeatX
+            </span>
+            <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.03em', textTransform: 'uppercase', margin: 0, lineHeight: 1.4 }}>
+              AI-Powered Examination Seating Planning and Student Seating Finder System
+            </p>
           </a>
 
           {/* View Switch Tabs */}
